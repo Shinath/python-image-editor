@@ -9,11 +9,13 @@ class View(Tk):
     self.resizable(False, False)
     self.active_window = None
 
+
   def change_active_window(self, event):
     active_windows = event.widget
     for window in self.winfo_children():
       if active_windows == window:
         self.active_window = window
+
 
 class NewWindow(Toplevel):
   def __init__(self, master, title = "", *args, **kwargs):
@@ -25,7 +27,11 @@ class NewWindow(Toplevel):
   def show_info(self):
     self.geometry('300x300')
     Label(self, text= "Autor: Wiktoria Kalata").pack()
-    self.mainloop()
+
+  def show_error(self, text):
+    Label(self, text= text, font = ("Helvetica", 15)).pack(padx=10, pady=10, anchor=CENTER)
+    self.grab_set()
+
 
 
 class NewImageWindow(NewWindow):
@@ -33,11 +39,9 @@ class NewImageWindow(NewWindow):
     super().__init__(master, image_filepath, *args, **kwargs)
     self.bind("<FocusIn>", master.change_active_window)
     self.title(image_filepath)
-    try:
-      self.image = img.Image(cv.imread(image_filepath), image_filepath)
-    except:
-      self.image = img.Image(image, image_filepath)
+    self.image = img.Image(image, image_filepath)
+
   def show_image(self):
     label = Label(self, image=self.image.tk_img)
     label.grid(row=0, column=0, sticky=N+S+E+W)
-    self.mainloop()
+    

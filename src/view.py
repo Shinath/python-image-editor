@@ -2,12 +2,14 @@ from tkinter import *
 import cv2 as cv 
 import image as img
 from PIL import Image, ImageTk
+from tkinter import messagebox
 
 class View(Tk):
   def __init__(self) -> None:
     super().__init__()
     self.resizable(False, False)
     self.active_window = None
+    self.title("APO")
 
 
   def change_active_window(self, event):
@@ -16,23 +18,12 @@ class View(Tk):
       if active_windows == window:
         self.active_window = window
 
-
 class NewWindow(Toplevel):
   def __init__(self, master, title = "", *args, **kwargs):
     super().__init__(master, *args, **kwargs)
     self.title(title)
     self.columnconfigure(0, weight=1)
     self.rowconfigure(0, weight=1)
-
-  def show_info(self):
-    self.geometry('300x300')
-    Label(self, text= "Autor: Wiktoria Kalata").pack()
-
-  def show_error(self, text):
-    Label(self, text= text, font = ("Helvetica", 15)).pack(padx=10, pady=10, anchor=CENTER)
-    self.grab_set()
-
-
 
 class NewImageWindow(NewWindow):
   def __init__(self, master, image = None, image_filepath = None, *args, **kwargs):
@@ -44,4 +35,8 @@ class NewImageWindow(NewWindow):
   def show_image(self):
     label = Label(self, image=self.image.tk_img)
     label.grid(row=0, column=0, sticky=N+S+E+W)
-    
+  
+  def refresh_image(self):
+    print(self.winfo_children())
+    label = self.winfo_children()[0]
+    label.configure(image = self.image.tk_img)

@@ -1,6 +1,6 @@
 from tkinter import *
 import cv2 as cv 
-import PIL
+import PIL 
 from numpy import *
 
 

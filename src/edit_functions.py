@@ -1,4 +1,4 @@
-import view
+from view import *
 from tkinter import *
 import cv2 as cv
 from PIL import Image, ImageTk
@@ -6,7 +6,7 @@ from PIL import Image, ImageTk
 class EditFunctions:
   def __init__(self, root):
     self.root = root
-
+#TODO NIEDZIAŁA
   def convert_to_gray(self):
     active_window = self.root.active_window
     if active_window.image.format == "Gray":

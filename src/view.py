@@ -14,7 +14,7 @@ class View(Tk):
 
   def change_active_window(self, event):
     active_windows = event.widget
-    for window in self.winfo_children():
+    for window in [window for window in self.root.winfo_children() if isinstance(window, NewImageWindow)]:
       if active_windows == window:
         self.active_window = window
 

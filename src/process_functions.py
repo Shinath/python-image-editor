@@ -47,36 +47,6 @@ class ProcessFunctions:
     img_inv = (255 - img)
     NewImageWindow(self.root, img_inv).show_image()
 
-  # TODO
-  def on_scale_change (self, value, active_window):
-
-      value = int(value)
-      if active_window.image.format == "RGB":
-            messagebox.showerror("Error", "Histograms are only for gray images")
-            return 
-
-      img = active_window.image.cv_img
-      img_th = np.zeros_like(img)
-
-      for h in range(img.shape[0]):
-        for w in range(img.shape[1]):
-          current_pixel = img[h,w]
-          if (current_pixel>127): img_th[h,w]=255
-      
-      active_window.image.cv_img = img_th
-      active_window.image.convert_to_tk_img()
-      active_window.refresh_image()
-      #NewImageWindow(self.root, img_th).show_image()
-
-  #TODO
-  def thresholding(self):
-    nw = NewWindow(self.root)
-    nw.geometry("300x300")
-    scale = Scale(nw, from_=0, to=255, orient=HORIZONTAL, resolution=5)
-    scale.config(command=lambda value: self.on_scale_change(value, self.root.active_window))
-    scale.pack()
-
-
   def posterize(self):
     if self.root.active_window.image.format == "RGB":
       messagebox.showerror("Error", "Histograms are only for gray images")
@@ -121,6 +91,42 @@ class ProcessFunctions:
 
     NewImageWindow(self.root, img_pstrz).show_image()
     nw.destroy()
+
+
+  def create_selective_stretching_window(self):
+    img = self.root.active_window.image.cv_img
+    nw = NewWindow(self.root)
+    p1 = IntVar()
+    p2 = IntVar()
+    q3 = IntVar()
+    q4 = IntVar()
+    Label(nw, text = "p1: ").grid(row=0, column=0)
+    Entry(nw, textvariable=p1).grid(row=0, column=1)
+    Label(nw, text= "p2: ").grid(row= 1, column=0)
+    Entry(nw, textvariable=p2).grid(row=1, column=1)
+    Label(nw, text= "q3: ").grid(row= 2, column=0)
+    Entry(nw, textvariable=q3).grid(row=2, column=1)
+    Label(nw, text= "q4: ").grid(row= 3, column=0)
+    Entry(nw, textvariable=q4).grid(row=3, column=1)
+    Button(nw, text= "Ok", command=lambda: self.selective_stretching(p1, p2, q3, q4, img, nw)).grid(row=4, column=1, sticky= W)
+
+           
+  def selective_stretching(self, p1, p2, q3, q4, img, nw):
+      #if p1 not in range(0,256) or p2 not in range(0,256) or q3 not in range(0,256) or q4 not in range(0,256): return 0
+      #if p1 > p2: p1, p2 = p2, p1
+            
+      # Rozciąganie selektywne
+      img_stretched = img.copy()
+      input_range = [int(p1.get()), int(p2.get())]
+      output_range = [int(q3.get()), int(q4.get())]
+      mask = (img_stretched >= input_range[0]) & (img_stretched <= input_range[1])
+      img_stretched[mask] = (img_stretched[mask] - input_range[0]) * (output_range[1] - output_range[0]) / (
+              input_range[1] - input_range[0]) + output_range[0]
+      img_stretched = img_stretched.astype(np.uint8)
+
+      # Update obrazka w oknie
+      NewImageWindow(self.root, img_stretched).show_image()
+      nw.destroy()
       
 
 # -------------------------------------

@@ -44,7 +44,7 @@ class Speedrun:
     NewImageWindow(self.root, img_laplacian).show_image()
     nw.destroy()
 
-  def create_sobel_window(self, func):
+  def create_sobel_window(self):
     img = self.root.active_window.image.cv_img
     nw = NewWindow(self.root)
     kernel_size = IntVar()
@@ -55,7 +55,7 @@ class Speedrun:
   def sobel(self, ksize, img, nw):
     sobelx = cv.Sobel(img, cv.CV_64F, 1, 0, ksize=ksize)
     sobely = cv.Sobel(img, cv.CV_64F, 0, 1, ksize=ksize)
-    frame_sobel = cv2.hconcat((sobelx, sobely))
+    frame_sobel = cv.hconcat((sobelx, sobely))
     NewImageWindow(self.root, frame_sobel).show_image()
     nw.destroy()
 

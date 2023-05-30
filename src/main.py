@@ -5,5 +5,6 @@ from menu_functions import *
 
 
 menu = View()
-generate_menubuttons(menu)
+gui = GUI(menu)
+gui.generate_menubuttons()
 menu.mainloop()

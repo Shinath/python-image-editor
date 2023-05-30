@@ -5,24 +5,11 @@ from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from view import *
+from validator import *
 
 class ShowFunctions:
   def __init__(self, root):
     self.root = root
-
-  def get_img_value_array(self):
-    active_window = self.root.active_window
-    if active_window.image.format == "RGB":
-      messagebox.showerror("Error", "Histograms are only for gray images")
-      return False
-    
-    my_hist =np.zeros(256)
-    img = active_window.image.cv_img
-    for h in range(img.shape[0]):
-      for w in range(img.shape[1]):
-        current_pixel = img[h,w]
-        my_hist[int(current_pixel)] += 1
-    return my_hist
 
   # show hist only for gray images
   def show_bar_hist(self):
@@ -53,3 +40,16 @@ class ShowFunctions:
       nw.title(titles[i])
       nw.show_image()
       i += 1
+
+def get_img_value_array(window):
+  
+  if not Validator.validate_gray_image(window):
+    return False
+  
+  my_hist= np.zeros(256)
+  img= window.image.cv_img
+  for h in range(img.shape[0]):
+    for w in range(img.shape[1]):
+      current_pixel= img[h,w]
+      my_hist[int(current_pixel)] += 1
+  return my_hist

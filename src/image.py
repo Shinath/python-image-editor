@@ -13,7 +13,7 @@ class Image():
     else:
       self.cv_img = img
     self.format = self.set_format()
-    self.tk_img = self.convert_to_tk_img()
+    self.tk_img = Image.convert_to_tk_img(self.cv_img, self.format)
 
   def read_image_in_format(self):
     if self.is_grey_scale():
@@ -32,13 +32,12 @@ class Image():
                 return False
     return True
 
-  def convert_to_tk_img(self):
-    if self.format == "RGB":
-      blue, green, red = cv.split(self.cv_img)
-      img = cv.merge((red, green, blue))
-    else:
-      img = self.cv_img
-    cv_img = PIL.Image.fromarray(img)
+  def convert_to_tk_img(image, format):
+    if format == "RGB":
+      blue, green, red = cv.split(image)
+      image = cv.merge((red, green, blue))
+    
+    cv_img = PIL.Image.fromarray(image)
     return PIL.ImageTk.PhotoImage(image=cv_img)
   
   def set_format(self):

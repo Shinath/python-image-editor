@@ -1,8 +1,7 @@
 from tkinter import *
 import cv2 as cv 
 import image as img
-from PIL import Image, ImageTk
-from tkinter import messagebox
+import PIL
 
 class View(Tk):
   def __init__(self) -> None:
@@ -14,7 +13,7 @@ class View(Tk):
 
   def change_active_window(self, event):
     active_windows = event.widget
-    for window in [window for window in self.root.winfo_children() if isinstance(window, NewImageWindow)]:
+    for window in [x for x in self.winfo_children() if isinstance(x, NewImageWindow)]:
       if active_windows == window:
         self.active_window = window
 
@@ -36,7 +35,12 @@ class NewImageWindow(NewWindow):
     label = Label(self, image=self.image.tk_img)
     label.grid(row=0, column=0, sticky=N+S+E+W)
   
-  def refresh_image(self):
-    print(self.winfo_children())
+  def refresh_image(self, image):
     label = self.winfo_children()[0]
-    label.configure(image = self.image.tk_img)
+    cv_img = img.Image.convert_to_tk_img(image, 'Grey')
+    label.configure(image = cv_img)
+    label.image = cv_img
+
+  def save_new_image(self, image, nw):
+    self.image = img.Image(image)
+    nw.destroy()

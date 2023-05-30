@@ -27,7 +27,17 @@ def generate_menubuttons(view):
                     "blending" : sp.creating_blending_window,
                     "bitwise and" : lambda: sp.create_logic_operation_window(sp.bitwise_and),
                     "bitwise or" : lambda: sp.create_logic_operation_window(sp.bitwise_or),
-                    "bitwise xor" : lambda: sp.create_logic_operation_window(sp.bitwise_xor),},
+                    "bitwise xor" : lambda: sp.create_logic_operation_window(sp.bitwise_xor),
+                    "morphological_operations" : sp.create_morphological_operations_window,
+                    "skeletonization" : sp.skeletonization,
+                    "watershed" : sp.watershed,
+                    "moments" : sp.create_moments_table,
+                    "object list" : sp.create_object_feature_vector_table,
+                    "create_thresholding_window" : sp.create_thresholding_window,
+                    "adaptive thresholding" : sp.create_adaptive_thresholging_window,
+                    "otsu's thresholding" : sp.otsus_thresholding,
+                    "Hough" : sp.detect_lines_hough},
+
       "info" : ff.info_window
       }
     for menu in menu_dict:

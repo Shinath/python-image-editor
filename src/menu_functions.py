@@ -2,18 +2,18 @@ from tkinter import *
 from view import *
 from file_functions import *
 from edit_functions import *
-from show_functions import *
+from analyze_functions import *
 from process_functions import *
-from speedrun import *
+import ttkbootstrap as ttk
+
 
 class GUI:
   def __init__(self, view):
     self.view = view
     self.ff = FileFunctions(view)
-    self.sf = ShowFunctions(view)
     self.ef = EditFunctions(view)
-    self.pf = ProcessFunctions(view)
-    self.sp = Speedrun(view)
+    self.af = AnalyzeFunctions(view)
+    self.sp = ProcessFunctions(view)
     self.menu_dict = {
         "File":{ 
                   "load" : self.ff.load_image, 
@@ -21,26 +21,26 @@ class GUI:
                   "save as..." : self.ff.save_as }, 
         "Edit":{ 
                   "to gray" : self.ef.convert_to_gray , 
-                  "split channels" : self.sf.split_channels},
+                  "split channels" : self.ef.split_channels},
         "Analyze":{ 
                   "histograms" : {
-                          "show histogram" : self.sf.show_bar_hist,
-                          "contrast stretching" : self.pf.stretch_hist,
-                          "equalization" : self.pf.equalization, 
-                          "selective stretching" : self.pf.create_selective_stretching_window,}, 
+                          "show histogram" : self.af.show_bar_hist,
+                          "contrast stretching" : self.af.stretch_hist,
+                          "equalization" : self.af.equalization, 
+                          "selective stretching" : self.af.create_selective_stretching_window,}, 
                   "calculate" : {
-                          "moments" : self.sp.create_moments_table,
-                          "objects" : self.sp.create_object_feature_vector_table,},
-                  "watershed" : self.sp.watershed,
-                  "skeletonization" : self.sp.skeletonization,
-                  "morphological_operations" : self.sp.create_morphological_operations_window,
-                  "Hough" : self.sp.detect_lines_hough},
+                          "moments" : self.af.create_moments_table,
+                          "objects" : self.af.create_object_feature_vector_table,},
+                  "watershed" : self.af.watershed,
+                  "skeletonization" : self.af.skeletonization,
+                  "morphological_operations" : self.af.create_morphological_operations_window,
+                  "Hough" : self.af.detect_lines_hough},
 
         "Process":{
-                  "median filter" : self.sp.create_median_filter_window,
+                  "median filter" : self.sp.create_median_filter_window, #TODO: bordery
                   "arithmetic operations" : {
-                          "negation" : self.pf.negation, 
-                          "posterize" : self.pf.posterize,
+                          "negation" : self.sp.negation, 
+                          "posterize" : self.sp.posterize,
                           "addition" : lambda: self.sp.create_logic_operation_window(self.sp.addition), 
                           "subtraction" : lambda: self.sp.create_logic_operation_window(self.sp.subtraction),
                           "blending" : self.sp.creating_blending_window,
@@ -51,10 +51,10 @@ class GUI:
                           },
                   },
                   "block operations" : {
-                          "blur" : self.sp.create_blur_window,
-                          "laplacian" : self.sp.create_laplacian_window, 
-                          "canny" : self.sp.create_canny_window,
-                          "sobel" : self.sp.create_sobel_window,
+                          "blur" : self.sp.create_blur_window, #TODO: bordery
+                          "laplacian" : self.sp.create_laplacian_window, #TODO: bordery
+                          "canny" : self.sp.create_canny_window, #TODO: bordery
+                          "sobel" : self.sp.create_sobel_window, #TODO: bordery
                           "linear sharpening" : self.sp.create_linear_sharpening_window, 
                           "edge detection" : self.sp.create_edge_detection_window,},
                   
@@ -69,7 +69,7 @@ class GUI:
 
   def generate_menubuttons(self):
     for menu in self.menu_dict:
-      mb = Menubutton(master = self.view, text = menu, indicatoron=False, font=("Helvetica", 17))
+      mb = ttk.Menubutton(master = self.view, text = menu, bootstyle=(ttk.OUTLINE, ttk.SUCCESS))
       if not isinstance(self.menu_dict[menu], dict):
         mb.bind("<Button-1>", self.menu_dict[menu])
       else:

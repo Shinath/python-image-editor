@@ -1,7 +1,9 @@
 from tkinter import *
 import cv2 as cv 
 import image as img
+import ttkbootstrap as ttk
 import PIL
+
 
 class View(Tk):
   def __init__(self) -> None:
@@ -23,12 +25,13 @@ class NewWindow(Toplevel):
     self.title(title)
     self.columnconfigure(0, weight=1)
     self.rowconfigure(0, weight=1)
+    self.resizable(False, False)
+    
 
 class NewImageWindow(NewWindow):
   def __init__(self, master, image = None, image_filepath = None, *args, **kwargs):
     super().__init__(master, image_filepath, *args, **kwargs)
     self.bind("<FocusIn>", master.change_active_window)
-    self.title(image_filepath)
     self.image = img.Image(image, image_filepath)
 
   def show_image(self):

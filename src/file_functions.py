@@ -7,9 +7,6 @@ class FileFunctions:
   def __init__(self, root):
     self.root = root
 
-  def test_function(self):
-    pass
-
 
   def load_image(self):
     filepath = fd.askopenfilename(
@@ -20,8 +17,8 @@ class FileFunctions:
                 ("All Files", "*.*")])
     if filepath == '':
       return
-    NewImageWindow(self.root, image_filepath = filepath).show_image()
 
+    NewImageWindow(self.root, image_filepath = filepath).show_image()
   def info_window(self, event):
     messagebox.showinfo("Info", "Autor: Wiktoria Kalata\n Prowadzący: mgr. inz. Roszkowiak Łukasz")
 
@@ -46,4 +43,5 @@ class FileFunctions:
 
     if not status:
       messagebox.showerror("Error", "File has not been saved")
+      return
     active_window.title(filepath.name)
